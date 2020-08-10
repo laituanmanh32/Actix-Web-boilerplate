@@ -23,6 +23,11 @@ Build using cargo:
 cargo build
 ```
 ## Running
+Migrate database
+```
+$ cargo install diesel_cli --no-default-features --features postgres
+$ diesel migration run
+```
 Run using cargo:
 ```
 cargo run
@@ -35,4 +40,27 @@ cargo install systemfd cargo-watch
 
 # run
 systemfd --no-pid -s http::5000 -- cargo watch -x run
+```
+
+## Example API
+List all Todo
+```
+curl --location --request GET 'http://localhost:5000/todos'
+```
+Create Todo
+```
+curl --location --request POST 'http://localhost:5000/todos' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+	"title": "new todo"
+}'
+```
+Update Todo
+```
+curl --location --request PUT 'http://localhost:5000/todos/1597084050864711688' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+	"title": "Job updated",
+	"status": "done"
+}'
 ```
