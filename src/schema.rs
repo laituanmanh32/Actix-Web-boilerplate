@@ -1,7 +1,9 @@
 table! {
     todo (id) {
-        id -> Int4,
-        title -> Nullable<Text>,
-        status -> Nullable<Varchar>,
+        id -> Int8,
+        title -> Text,
+        status -> Varchar,
+        created_at -> Timestamptz,
+        updated_at -> Nullable<Timestamptz>,
     }
 }

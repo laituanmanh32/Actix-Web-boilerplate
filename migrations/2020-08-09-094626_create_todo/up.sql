@@ -3,7 +3,9 @@
 
 CREATE TABLE "todo"
 (
-    id    SERIAL PRIMARY KEY,
-    title TEXT,
-    status varchar(10)
+    id    bigserial PRIMARY KEY,
+    title TEXT not null,
+    status varchar(10) not null ,
+    created_at TIMESTAMPTZ not null Default NOW()::timestamptz,
+    updated_at TIMESTAMPTZ
 )

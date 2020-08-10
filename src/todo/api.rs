@@ -1,25 +1,33 @@
-use actix_web::{web, get, post, HttpResponse};
+use actix_web::{get, put, HttpResponse, post, web};
 use actix_web::Responder;
-use crate::todo::models::Todo;
 
-#[get("/")]
-pub async fn list() -> impl Responder {
-    HttpResponse::Ok().json(
-        vec![
-            Todo {id: 1, title: "Task 1".to_string(), status: "new".to_string() },
-            Todo {id: 2, title: "Task 2".to_string(), status: "done".to_string() },
-        ]
-    )
+use crate::api_error::ApiError;
+use crate::todo::models::{CreateTodoMessage, Todo, UpdateTodoMessage};
+
+#[get("/todos")]
+pub async fn list() -> Result<HttpResponse, ApiError> {
+    let todos = Todo::find_all()?;
+    Ok(HttpResponse::Ok().json(
+        todos
+    ))
 }
 
 #[get("/todos/{id}")]
-pub async fn find() -> impl Responder {
-    HttpResponse::Ok().json(
-        Todo {id: 1, title: "Task 1".to_string(), status: "new".to_string() }
-    )
+pub async fn find(id: web::Path<i64>) -> Result<HttpResponse, ApiError> {
+    let todo = Todo::find_by_id(id.into_inner())?;
+    Ok(HttpResponse::Ok().json(
+        todo
+    ))
 }
 
 #[post("/todos")]
-pub async fn create(todo: web::Json<Todo>) -> impl Responder {
-    HttpResponse::Ok().json(todo.into_inner())
+pub async fn create(todo: web::Json<CreateTodoMessage>) -> Result<HttpResponse, ApiError> {
+    let todo = Todo::create(todo.into_inner())?;
+    Ok(HttpResponse::Ok().json(todo))
+}
+
+#[put("/todos/{id}")]
+pub async fn update(id: web::Path<i64>, update: web::Json<UpdateTodoMessage>) -> Result<HttpResponse, ApiError> {
+    let todo = Todo::update(id.into_inner(), update.into_inner())?;
+    Ok(HttpResponse::Ok().json(todo))
 }

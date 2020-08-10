@@ -1,12 +1,20 @@
+
 #[macro_use]
 extern crate log;
+#[macro_use]
+extern crate diesel;
+#[macro_use]
+extern crate diesel_migrations;
 
 use actix_web::{Responder, HttpResponse, HttpServer, get, App};
 use listenfd::ListenFd;
 use dotenv::dotenv;
 use std::env;
 
-pub mod todo;
+mod todo;
+mod api_error;
+mod db;
+mod schema;
 
 #[get("/")]
 async fn index() -> impl Responder {
